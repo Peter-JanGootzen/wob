@@ -1,6 +1,12 @@
+extern crate dotenv;
+
 use tcp_http_server::server::tcp_http_server::TcpHttpServer;
+use dotenv::dotenv;
+use std::env;
 
 fn main() {
-    let server = TcpHttpServer::new("127.0.0.1:8000");
+    dotenv().ok();
+    let addr = env::var("URL").expect("You must provide a URL var in the .env");
+    let server = TcpHttpServer::new(addr);
     server.start();
 }
