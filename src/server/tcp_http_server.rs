@@ -24,18 +24,18 @@ impl TcpHttpServer {
             match stream {
                 Ok(stream) => self
                     .threadpool
-                    .execute(|| TcpHttpServer::handle_connection(stream)),
+                    .execute(|| self.handle_connection(stream)),
                 Err(err) => println!("{:?}", err),
             }
         }
     }
-    fn handle_connection(mut stream: TcpStream) {
+    fn handle_connection(&self, mut stream: TcpStream) {
         let mut buffer = [0; 512];
         stream.read(&mut buffer).unwrap();
 
         match HttpRequest::from_buffer(&buffer) {
             Ok(req) => {
-                let response = TcpHttpServer::handle_request(req);
+                let response = self.handle_request(req);
 
                 stream.write(response.to_string().as_bytes()).unwrap();
                 stream.flush().unwrap();
@@ -45,7 +45,7 @@ impl TcpHttpServer {
             }
         }
     }
-    fn handle_request(req: HttpRequest) -> HttpResponse {
+    fn handle_request(&self, req: HttpRequest) -> HttpResponse {
         if req.method == "GET" && req.http_version == "HTTP/1.1" {
             match fs::read_to_string(req.get_html_file_path()) {
                 Ok(content) => HttpResponse {
