@@ -1,5 +1,5 @@
 [package]
-name = "tcp_web_server"
+name = "tcp_http_server"
 version = "0.1.0"
 authors = ["Peter-Jan Gootzen <peterjan@gootzen.net>"]
 edition = "2018"
