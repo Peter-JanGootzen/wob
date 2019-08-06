@@ -49,19 +49,19 @@ impl TcpHttpServer {
         if req.method == "GET" && req.http_version == "HTTP/1.1" {
             match fs::read_to_string(req.get_html_file_path()) {
                 Ok(content) => HttpResponse {
-                    Http_version: "HTTP/1.1",
+                    http_version: "HTTP/1.1",
                     status_code: "200 OK",
                     content,
                 },
                 Err(_) => HttpResponse {
-                    Http_version: "HTTP/1.1",
+                    http_version: "HTTP/1.1",
                     status_code: "200 OK",
                     content: fs::read_to_string("static/404.html").unwrap(),
                 },
             }
         } else {
             HttpResponse {
-                Http_version: "HTTP/1.1",
+                http_version: "HTTP/1.1",
                 status_code: "400 BAD REQUEST",
                 content: String::from("Invalid Http version or method"),
             }
