@@ -10,8 +10,8 @@ fn create_pipeline() {
         http_version: &String::from("")
     };
     let mut res = HttpResponse {
-        http_version: &String::from(""),
-        status_code: &String::from(""),
+        http_version: String::from(""),
+        status_code: String::from(""),
         content: String::from("")
     };
     let m1 = Middleware::new(
