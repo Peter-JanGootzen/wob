@@ -9,7 +9,7 @@ impl HttpResponse {
         Self {
             http_version: String::new(),
             status_code: String::new(),
-            content: String::new()
+            content: String::new(),
         }
     }
     pub fn to_string(&self) -> String {
