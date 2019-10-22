@@ -6,7 +6,7 @@ use std::sync::Mutex;
 
 pub struct ThreadPool {
     workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
+    sender: Mutex<mpsc::Sender<Job>>,
 }
 
 impl ThreadPool {
@@ -21,6 +21,7 @@ impl ThreadPool {
         assert!(size > 0);
 
         let (sender, receiver) = mpsc::channel();
+        let sender = Mutex::new(sender);
         let receiver = Arc::new(Mutex::new(receiver));
         let mut workers = Vec::with_capacity(size);
 
@@ -33,9 +34,9 @@ impl ThreadPool {
     }
     pub fn execute<F>(&self, f: F)
     where
-        F: FnOnce() + Send + 'static,
+        F: FnOnce() + Send + Sync + 'static,
     {
         let job = Box::new(f);
-        self.sender.send(job).unwrap();
+        self.sender.lock().unwrap().send(job).unwrap();
     }
 }
